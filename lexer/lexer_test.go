@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"testing"
+
 	"github.com/ShunOkuma/interpreterGo/token"
 )
 
@@ -24,7 +25,7 @@ func TestNextToken(t *testing.T) {
 		{token.EOF, ""},
 	}
 
-	l := New(input) // Newは未実装
+	l := New(input)
 
 	for i, tt := range tests {
 		tok := l.NextToken() // 未実装
