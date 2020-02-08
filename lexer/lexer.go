@@ -71,8 +71,29 @@ func (l *Lexer) NextToken() token.Token {
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
+	default: // 識別子/キーワード
+		if isLetter(l.ch) {
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
+			return tok // 早めにreturnしているのはreadIdentifier()でreadCharしているため
+		}
+		tok = newToken(token.ILLEGAL, l.ch)
 	}
 
 	l.readChar()
 	return tok
+}
+
+func (l *Lexer) readIdentifier() string {
+	position := l.position
+	for isLetter(l.ch) { // isLetterがtrueである限り、つまりa~z, A~Z, _である限り、loopしてreadCharし続ける
+		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
+// isLetter :chが a~z, A~Z, _ のどれかだったらその文字をそのまま返す、どれでもない場合は False を返す
+// こうすることで簡単に何を英字とするかを設定できる。ここでは_も英字として扱っている。
+func isLetter(ch byte) bool {
+	return 'a' <= ch && ch >= 'z' || 'A' <= ch && ch >= 'Z' || ch == '_'
 }

@@ -54,3 +54,17 @@ const (
 	ELSE     = "ELSE"
 	RETURN   = "RETURN"
 )
+
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+// LookupIdent :入力がkeywordsに該当するかを検索する関数
+func LookupIdent(ident string) TokenType {
+	// mapは2つ目の返り値として値が存在しているかどうかをTrue, Falseで返してくれる
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT // keywordsではなかったらIDENTを返す
+}
